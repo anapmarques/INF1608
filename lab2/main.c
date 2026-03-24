@@ -2,6 +2,11 @@
 #include <math.h>
 #include <stdio.h>
 
+#define G 9.8
+#define C 15
+#define V 35
+#define T 9
+
 // contagem de avaliacoes da funcao (N=0 antes de chamar o metodo da bissecao)
 int N;
 
@@ -19,7 +24,9 @@ static double f2 (double x)
 
 static double massa (double x)
 {
-  return -1; // retorne o valor correto
+  N++;
+  double m = x;
+  return (G * m / C) * (1.0 - exp(-(C / m) * T)) - V; // retorne o valor correto
 }
 
 void testebissecao (double a, double b, double (*f)(double))
@@ -39,7 +46,7 @@ static double x2_a (double x)
 {
   N++;
   double a = 9.0;
-  return -1; // complete com a funcao correta
+  return x*x - a; // complete com a funcao correta
 }
 
 static double d_x2_a (double x)
@@ -52,7 +59,7 @@ static double x3_a (double x)
 {
   N++;
   double a = 64.0;
-  return -1; // complete com a funcao correta
+  return x*x*x - a; // complete com a funcao correta
 }
 
 static double d_x3_a (double x)
