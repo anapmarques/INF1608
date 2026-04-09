@@ -18,19 +18,12 @@ double mmq (int m, int n, double** A, double* b, double* x)
   
   gauss(n, AtA, Atb, x);
   
-  printf("solução:\n");
-  for (int i = 0; i < n; i++){
-      printf("x[%d] = %lf\n", i, x[i]);
-  }
-  
   double* Ax = vet_cria(m);
   mat_multv(m, n, A, x, Ax);
   
-  printf("Ax:\n");
   double* r = vet_cria(m);
   for (int i = 0; i < m; i++) {
       r[i] = b[i] - Ax[i];
-      printf("Ax[%d] = %lf\n", i, Ax[i]);
   }
   
   double erro = vet_norma2(m, r);
@@ -70,10 +63,51 @@ double ajuste_parabola (int n, double* px, double* py, double* a, double* b, dou
 
 double ajuste_cubica (int n, double* px, double* py, double* a, double* b, double* c, double* d)
 {
-  return -1.0; // Completar
+  double** A = mat_cria(n, 4);
+
+  for (int i = 0; i < n; i++) {
+      A[i][0] = 1.0;
+      A[i][1] = px[i];
+      A[i][2] = px[i] * px[i];
+      A[i][3] = px[i] * px[i] * px[i];
+  }
+
+  double* x = vet_cria(4);
+
+  double erro = mmq(n, 4, A, py, x);
+
+  *a = x[0];
+  *b = x[1];
+  *c = x[2];
+  *d = x[3];
+
+  mat_libera(n, A);
+  vet_libera(x);
+
+  return erro;
 }
 
 double ajuste_exponencial_exp (int n, double* px, double* py, double* a, double* b)
 {
-  return -1.0; // Completar
+  double** A = mat_cria(n, 2);
+  double* Y = vet_cria(n);
+
+  for (int i = 0; i < n; i++) {
+    A[i][0] = 1.0;
+    A[i][1] = px[i];
+    Y[i] = log(py[i]);
+  }
+
+  double* x = vet_cria(2);
+
+  double erro = mmq(n, 2, A, Y, x);
+
+  *a = exp(x[0]);
+  *b = x[1];
+
+  mat_libera(n, A);
+  vet_libera(x);
+  vet_libera(Y);
+
+  return erro;
 }
