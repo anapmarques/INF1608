@@ -41,13 +41,30 @@ double evolui (double t, double h, double x, double y, double xp, double yp, dou
     return t + h;
 }
 
-void simula (double x0, double y0, double t, int n, double* x, double* y){
+void simula(double x0, double y0, double t, int n, double* x, double* y){
     double h = t / n;
-    
+
+    double tempo = 0.0;
+
+    double xp = x0;
+    double yp = y0;
+
+    double xc = x0;
+    double yc = y0;
+
+    double xn, yn;
+
     for (int i = 0; i < n; i++) {
-        
+
+        tempo = evolui(tempo, h, xc, yc, xp, yp, &xn, &yn);
+
+        x[i] = xn;
+        y[i] = yn;
+
+        xp = xc;
+        yp = yc;
+
+        xc = xn;
+        yc = yn;
     }
-    double x1, y1;
-    double tempo = evolui(h, h, x0, y0, x, y, &x1, &y1);
-    
 }
